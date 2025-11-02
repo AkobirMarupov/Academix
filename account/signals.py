@@ -20,7 +20,7 @@ def create_user_profile(sender, instance, created, **kwargs):
         
         Profile.objects.create(
             user=instance,
-            full_name=username_part,   # faqat "ali" qismi tushadi
+            full_name=username_part,   
             phone_number=instance.phone_number
         )
 
