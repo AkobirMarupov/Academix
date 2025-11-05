@@ -24,7 +24,7 @@ class CenterCreateAPIView(APIView):
             400: "Notugri malumot yuborildi",
             401: "Avtorizatsiya talab etiladi",
         },
-        tags=["Center Management"],
+        tags=[],
     )
 
     def post(self, request,):
