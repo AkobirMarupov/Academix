@@ -95,18 +95,17 @@ class TeacherAdmin(admin.ModelAdmin):
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('address', 'center', 'google_maps_link', 'created_at')
-    search_fields = ('address', 'center__name')
-    list_filter = ('center',)
+    list_display = ('id', 'center', 'city', 'address', 'is_primary', 'is_active', 'created_at')
+    list_filter = ('country', 'city', 'is_primary', 'is_active')
+    search_fields = ('city', 'address', 'country')
+    ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
 
     fieldsets = (
-        ('Manzil malumotlari', {
-            'fields': ('address', 'center', 'google_maps_link')
+        ('Manzil maʼlumotlari', {
+            'fields': ('center', 'address', 'google_maps_link', 'is_active')
         }),
-        ('Tizim malumotlari', {
+        ('Tizim maʼlumotlari', {
             'fields': ('created_at', 'updated_at')
         }),
     )
-
-    ordering = ('-created_at',)
