@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+
 schema_view = get_schema_view(
    openapi.Info(
       title="Shop_Stack API",
@@ -25,23 +26,27 @@ schema_view = get_schema_view(
    authentication_classes=[],
 )
 
-
-
 urlpatterns = [
-    path('i18n/', include('django.conf.urls.i18n')),
+    # Admin panel
     path('admin/', admin.site.urls),
-    
+
+    # Internationalization
+    path('i18n/', include('django.conf.urls.i18n')),
+
+    # JWT Auth
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('account/', include('account.urls')),
 
-    # Swagger and Redoc URLs
+    # Swagger & Redoc
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+    path('account/', include('account.urls')),
     path('🏪Center/', include("center.api_endpoints.center.urls")),
+    path('👨🏼‍🏫Teacher/', include("center.api_endpoints.teacher.urls")),
 ]
 
+# Media fayllar (faqat DEBUG = True bo‘lganda)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

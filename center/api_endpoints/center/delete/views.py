@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
 
 from center.models import Center
 
@@ -30,9 +29,9 @@ class CenterDEleteAPIView(APIView):
         
         if center.owner != request.user:
             return Response(
-                 {"error": "You do not have permission to delete this center."},
+                {"error": "You do not have permission to delete this center."},
                 status=status.HTTP_403_FORBIDDEN
             )
         
         center.delete()
-        return Response({"message": "Center successfully deleted."}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"message": "Markaz muvaffaqiyatli ochirildi."}, status=status.HTTP_204_NO_CONTENT)

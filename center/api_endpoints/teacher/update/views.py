@@ -1,24 +1,26 @@
 from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
-from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from center.api_endpoints.center.update.serializers import CenterUpdateSerializers
-from center.models import Center
+from center.models import Teacher
+from center.api_endpoints.teacher.update.serializers import TeacherUpdateSerializers
 
-class CenterUpdateAPIView(APIView):
+
+
+class TeacherUpdateAPIView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
         operation_summary="Update your own center information",
         operation_description="Allows an authenticated user to update their own center details.",
-        request_body=CenterUpdateSerializers,
+        request_body=TeacherUpdateSerializers,
         responses={
-            200: openapi.Response('Center successfully updated.', CenterUpdateSerializers),
+            200: openapi.Response('Center successfully updated.', TeacherUpdateSerializers),
             400: "Invalid input data",
             403: "You are not allowed to edit this center",
             404: "Center not found"
@@ -28,24 +30,21 @@ class CenterUpdateAPIView(APIView):
 
     def put(self, request, pk):
         try:
-            center = Center.objects.get(pk=pk)
-        except Center.DoesNotExist:
-            return Response({'detail': 'Markaz topilmadi.'}, status=status.HTTP_404_NOT_FOUND)
+            teacher = Teacher.objects.get(pk=pk)
+        except Teacher.DoesNotExist:
+            return Response({'detail': 'Ustoz topilmadi.'}, status=status.HTTP_404_NOT_FOUND)
         
-
-        if center.owner != request.user:
+        if teacher.owner != request.user:
             return Response(
-                 {"error": "Sizda bu markazni tahrirlash uchun ruxsat yoq."},
+                {'detail': 'Sizda bu malumotni tahrirlash uchun ruxsat yuq.'},
                 status=status.HTTP_403_FORBIDDEN
             )
-        
-        serializer = CenterUpdateSerializers(center, data= request.data, partial= True)
+        serializer = TeacherUpdateSerializers(teacher, data=request.data, partial= True)
 
         if serializer.is_valid():
             serializer.save()
             return Response(
-                {"message": "Markaz muvaffaqiyatli yangilandi.", "data": serializer.data},
+                {'detail': 'Malumotlare muvafaqqiyatli yangilandi.'},
                 status=status.HTTP_200_OK
             )
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

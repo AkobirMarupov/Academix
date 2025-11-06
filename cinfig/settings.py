@@ -43,6 +43,7 @@ LOCAL_APPS = [
 
 EXTERNAL_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'drf_yasg',
     'jazzmin',
@@ -172,6 +173,16 @@ SWAGGER_SETTINGS = {
         },
     },
     'USE_SESSION_AUTH': False,
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Hamma API default faqat authenticated
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # JWT token majburiy
+    ],
 }
 
 

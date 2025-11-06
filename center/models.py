@@ -22,6 +22,7 @@ class Center(BaseModel):
 class Teacher(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teachers')  
     subject = models.CharField(max_length=100, null=True, blank=True)
     experience_years = models.PositiveIntegerField(default=0)
     age = models.PositiveIntegerField(null=True, blank=True)
