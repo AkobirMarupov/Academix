@@ -1,8 +1,8 @@
 from django.contrib import admin
+from django.utils.text import slugify
+from .models import Subject
 from django.utils.html import format_html
-from .models import Center, Teacher, Location
-
-
+from .models import Center, Teacher, Location, Subject
 
 def avatar_preview(obj):
     if obj.avatar:
@@ -46,6 +46,22 @@ class LocationInline(admin.TabularInline):
 
 
 
+
+@admin.register(Subject)
+class SubjectAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'level', 'is_active')
+    list_filter = ('level', 'is_active')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}  
+    ordering = ('id',)
+    list_editable = ('is_active',) 
+
+    def save_model(self, request, obj, form, change):
+        if not obj.slug:
+            obj.slug = slugify(obj.name)
+        super().save_model(request, obj, form, change)
+
+
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
     list_display = ('name', 'owner', 'email', 'phone', 'telegram', 'subject',avatar_preview)
@@ -72,22 +88,26 @@ class CenterAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'subject', 'center', 'experience_years', 'age', image_preview)
-    list_filter = ('center', 'subject')
-    search_fields = ('first_name', 'last_name', 'subject', 'center__name')
+    list_display = ('first_name', 'last_name', 'get_subject_name', 'center', 'experience_years', 'age', image_preview)
+    list_filter = ('center', 'subject__level')  # yoki 'center', 'subject__name' kabi
+    search_fields = ('first_name', 'last_name', 'subject__name', 'center__name')
     readonly_fields = ('created_at', 'updated_at', image_preview)
 
+    def get_subject_name(self, obj):
+        return obj.subject.name if obj.subject else "-"
+    get_subject_name.short_description = "Subject"
+
     fieldsets = (
-        ('Shaxsiy malumotlar', {
-            'fields': ('first_name', 'last_name', 'age')
-        }),
-        ('Talim malumotlari', {
-            'fields': ('subject', 'experience_years', 'center')
-        }),
-        ('Rasm va tizim', {
-            'fields': ('image', image_preview, 'created_at', 'updated_at')
-        }),
-    )
+    ('Shaxsiy malumotlar', {
+        'fields': ('first_name', 'last_name', 'age', 'owner')
+    }),
+    ('Talim malumotlari', {
+        'fields': ('subject', 'experience_years', 'center')
+    }),
+    ('Rasm va tizim', {
+        'fields': ('image', image_preview, 'created_at', 'updated_at')
+    }),
+)
 
     ordering = ('last_name',)
     list_per_page = 25

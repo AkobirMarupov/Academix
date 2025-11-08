@@ -40,9 +40,7 @@ class Profile(BaseModel):
     birth_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.full_name
-
-
+        return self.full_name 
 
 class Story(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stories')

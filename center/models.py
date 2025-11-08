@@ -6,6 +6,23 @@ from common.models import BaseModel
 from account.models import User
 
 
+
+
+class Subject(BaseModel):
+    LEVEL_CHOICES = [
+        ('beginner', _('Boshlang‘ich')),
+        ('intermediate', _('O‘rta')),
+    ]
+
+    name = models.CharField(max_length=200, unique=True)
+    level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner')
+    is_active = models.BooleanField(default=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Center(BaseModel):
     name = models.CharField(max_length=200, null=False, blank=False)
     phone = models.CharField(max_length= 50, null=True, blank=True)
@@ -26,7 +43,7 @@ class Teacher(BaseModel):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='teachers')  
-    subject = models.CharField(max_length=100, null=True, blank=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     experience_years = models.PositiveIntegerField(default=0)
     age = models.PositiveIntegerField(null=True, blank=True)
     image = models.ImageField(upload_to='teachers/images/',null=True,blank=True)
