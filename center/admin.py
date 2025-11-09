@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.utils.text import slugify
-from .models import Subject
 from django.utils.html import format_html
 from .models import Center, Teacher, Location, Subject
+
 
 def avatar_preview(obj):
     if obj.avatar:
@@ -28,23 +28,27 @@ def image_preview(obj):
 image_preview.short_description = "Rasm"
 
 
-
-
 class TeacherInline(admin.TabularInline):
     model = Teacher
     extra = 1
-    fields = ('first_name', 'last_name', 'subject', 'experience_years', 'age')
-    readonly_fields = ('experience_years',)
+    fields = ('get_full_name', 'get_subjects', 'experience_years')
+    readonly_fields = ('get_full_name', 'get_subjects')
     show_change_link = True
+
+    def get_full_name(self, obj):
+        return obj.user.profile.full_name if hasattr(obj.user, 'profile') else str(obj.user)
+    get_full_name.short_description = "O‘qituvchi"
+
+    def get_subjects(self, obj):
+        return ", ".join([s.name for s in obj.subjects.all()])
+    get_subjects.short_description = "Fanlar"
 
 
 class LocationInline(admin.TabularInline):
     model = Location
     extra = 1
-    fields = ('address', 'google_maps_link')
+    fields = ('city', 'address', 'is_primary')
     show_change_link = True
-
-
 
 
 @admin.register(Subject)
@@ -52,80 +56,86 @@ class SubjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'level', 'is_active')
     list_filter = ('level', 'is_active')
     search_fields = ('name',)
-    prepopulated_fields = {'slug': ('name',)}  
+    prepopulated_fields = {'slug': ('name',)}
     ordering = ('id',)
-    list_editable = ('is_active',) 
+    list_editable = ('is_active',)
 
     def save_model(self, request, obj, form, change):
         if not obj.slug:
             obj.slug = slugify(obj.name)
         super().save_model(request, obj, form, change)
 
-
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'email', 'phone', 'telegram', 'subject',avatar_preview)
-    search_fields = ('name', 'owner__username', 'email', 'phone')
+    list_display = ('name', 'owner', 'email', 'phone', 'telegram', 'get_subjects', avatar_preview)
+    search_fields = ('name', 'owner__email', 'email', 'phone')
     list_filter = ('owner', 'created_at')
     readonly_fields = ('created_at', 'updated_at', avatar_preview)
     inlines = [TeacherInline, LocationInline]
+    filter_horizontal = ('subjects',)  
 
-    fieldsets = (
-        ('Asosiy malumotlar', {
-            'fields': ('name', 'bio', 'owner', 'subject')
-        }),
-        ('Aloqa malumotlari', {
-            'fields': ('phone', 'email', 'telegram')
-        }),
-        ('Rasm va tizim', {
-            'fields': ('avatar', avatar_preview, 'created_at', 'updated_at')
-        }),
-    )
+
+    def get_subjects(self, obj):
+        return ", ".join([s.name for s in obj.subjects.all()])
+    get_subjects.short_description = "Fanlar"
 
     ordering = ('-created_at',)
     list_per_page = 20
 
-
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'get_subject_name', 'center', 'experience_years', 'age', image_preview)
-    list_filter = ('center', 'subject__level')  # yoki 'center', 'subject__name' kabi
-    search_fields = ('first_name', 'last_name', 'subject__name', 'center__name')
+    list_display = ('get_full_name', 'get_center', 'get_subjects', 'experience_years', image_preview)
+    list_filter = ('center',)
+    search_fields = ('user__profile__full_name', 'center__name')
     readonly_fields = ('created_at', 'updated_at', image_preview)
 
-    def get_subject_name(self, obj):
-        return obj.subject.name if obj.subject else "-"
-    get_subject_name.short_description = "Subject"
-
     fieldsets = (
-    ('Shaxsiy malumotlar', {
-        'fields': ('first_name', 'last_name', 'age', 'owner')
-    }),
-    ('Talim malumotlari', {
-        'fields': ('subject', 'experience_years', 'center')
-    }),
-    ('Rasm va tizim', {
-        'fields': ('image', image_preview, 'created_at', 'updated_at')
-    }),
-)
+        ('Shaxsiy maʼlumotlar', {
+            'fields': ('user',)
+        }),
+        ('Taʼlim va ish', {
+            'fields': ('subjects', 'experience_years', 'center')
+        }),
+        ('Rasm va tizim', {
+            'fields': ('image', image_preview, 'created_at', 'updated_at')
+        }),
+    )
 
-    ordering = ('last_name',)
+    def get_full_name(self, obj):
+        return obj.user.profile.full_name if hasattr(obj.user, 'profile') else str(obj.user)
+    get_full_name.short_description = "O‘qituvchi"
+
+    def get_center(self, obj):
+        return obj.center.name
+    get_center.short_description = "Markaz"
+
+    def get_subjects(self, obj):
+        return ", ".join([s.name for s in obj.subjects.all()])
+    get_subjects.short_description = "Fanlar"
+
+    ordering = ('user__email',)
     list_per_page = 25
 
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'center', 'city', 'address', 'is_primary', 'is_active', 'created_at')
+    list_display = ('id', 'center', 'country', 'city', 'address', 'is_primary', 'is_active', 'created_at')
     list_filter = ('country', 'city', 'is_primary', 'is_active')
     search_fields = ('city', 'address', 'country')
-    ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at')
 
     fieldsets = (
         ('Manzil maʼlumotlari', {
-            'fields': ('center', 'address', 'google_maps_link', 'is_active')
+            'fields': (
+                'center', 'country', 'city', 'region',
+                'address', 'postal_code', 'google_maps_link',
+                'latitude', 'longitude', 'is_primary', 'is_active'
+            )
         }),
         ('Tizim maʼlumotlari', {
             'fields': ('created_at', 'updated_at')
         }),
     )
+
+    ordering = ('-created_at',)
+    list_per_page = 30

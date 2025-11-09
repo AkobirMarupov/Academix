@@ -1,11 +1,13 @@
 from django.db import models
-from common.models import BaseModel
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 
+from common.models import BaseModel
 from account.manager import UserManager
+
+
 
 class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(unique=True)
@@ -17,6 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_superadmin = models.BooleanField(default=False)
     is_center_admin = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
 
     objects = UserManager()
@@ -28,11 +31,12 @@ class User(AbstractBaseUser, PermissionsMixin, BaseModel):
         return self.email
 
     class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+
 
 class Profile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     full_name = models.CharField(max_length=150)
     phone_number = models.CharField(max_length=20, null=True, blank=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -40,7 +44,16 @@ class Profile(BaseModel):
     birth_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.full_name 
+        return self.full_name or self.user.email
+
+    class Meta:
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+
+
+def default_expiration():
+    return timezone.now() + timedelta(hours=24)
+
 
 class Story(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stories')
@@ -49,14 +62,17 @@ class Story(BaseModel):
     image = models.ImageField(upload_to='stories/images/', null=True, blank=True)
     video = models.FileField(upload_to='stories/videos/', null=True, blank=True)
     is_active = models.BooleanField(default=True)
-    expires_at = models.DateTimeField(default=timezone.now() + timedelta(hours=24))
-
+    expires_at = models.DateTimeField(default=default_expiration)
 
     def __str__(self):
-        return self.title
+        return f"{self.user.email} — {self.title}"
 
     def is_expired(self):
         return timezone.now() > self.expires_at
 
     def view_count(self):
         return self.views.count()
+
+    class Meta:
+        verbose_name = _("Story")
+        verbose_name_plural = _("Stories")

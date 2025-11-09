@@ -10,14 +10,11 @@ class TeacherCreateSerializers(serializers.ModelSerializer):
         fields = [
             "first_name",
             "last_name",
-            "subject",
-            "experience_years",
-            "age",
-            "image",
+            "user",
             "center",
+            "subjects",
+            "experience_years",
+            'age',
+            "image",
+            "bio",
         ]
-        extra_kwargs = {
-            "subject": {"required": False},
-            "age": {"required": False},
-            "image": {"required": False},
-        }

@@ -42,7 +42,8 @@ urlpatterns = [
     path('🏛Center/', include("center.api_endpoints.center.urls")),
     path('👨🏼‍🏫Teacher/', include("center.api_endpoints.teacher.urls")),
     path('📍Location/', include("center.api_endpoints.location.urls")),
-    path('📚Course/', include('course.api_endpoints.course.urls'))
+    path('📚Course/', include('course.api_endpoints.course.urls')),
+    path('🥇Review/', include('course.api_endpoints.review.urls')),
 ]
 
 if settings.DEBUG:
