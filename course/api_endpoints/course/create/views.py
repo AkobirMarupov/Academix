@@ -15,7 +15,7 @@ class CourseCreateAPIView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     @swagger_auto_schema(
-        operation_description="Create a new Center",
+        operation_description="Create a new course",
         request_body=CourseCreateSerializers,
         responses={
             201: openapi.Response(

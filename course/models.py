@@ -75,14 +75,13 @@ class Review(BaseModel):
             self.rating += 1
             self.save(update_fields=['rating'])
         return self.rating
-
-
+    
+    
 class Homework(BaseModel):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='homeworks')
     title = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    files = models.FileField(blank=True, null=True)
     due_date = models.DateField(null=True, blank=True)
-    created_by = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='homeworks')
     is_checked = models.BooleanField(default=False)
 
     class Meta:

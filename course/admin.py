@@ -42,8 +42,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Homework)
 class HomeworkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'course', 'created_by', 'due_date', 'is_checked')
+    list_display = ('title', 'course', 'due_date', 'is_checked')
     list_filter = ('course', 'is_checked')
-    search_fields = ('title', 'course__title', 'created_by__user__profile__full_name')
+    search_fields = ('title', 'course__title', 'user__profile__full_name')
     ordering = ('-created_at',)
     list_per_page = 30

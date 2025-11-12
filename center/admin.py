@@ -84,14 +84,14 @@ class CenterAdmin(admin.ModelAdmin):
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('get_full_name', 'get_center', 'get_subjects', 'experience_years', image_preview)
+    list_display = ('get_full_name', "first_name", "last_name", 'get_center', 'get_subjects', 'experience_years', image_preview)
     list_filter = ('center',)
     search_fields = ('user__profile__full_name', 'center__name')
     readonly_fields = ('created_at', 'updated_at', image_preview)
 
     fieldsets = (
         ('Shaxsiy maʼlumotlar', {
-            'fields': ('user',)
+            'fields': ('user', "first_name", "last_name")
         }),
         ('Taʼlim va ish', {
             'fields': ('subjects', 'experience_years', 'center')
