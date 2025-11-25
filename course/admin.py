@@ -7,7 +7,7 @@ from django.utils.html import format_html
 class HomeworkInline(admin.TabularInline):
     model = Homework
     extra = 1
-    fields = ('title', 'due_date', 'created_by', 'is_checked')
+    fields = ('title', 'due_date', 'is_checked')
     readonly_fields = ()
     show_change_link = True
 
