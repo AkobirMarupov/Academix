@@ -44,7 +44,7 @@ class Profile(BaseModel):
     birth_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.full_name or self.user.email
+        return self.full_name
 
     class Meta:
         verbose_name = _("Profile")

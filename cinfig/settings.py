@@ -43,6 +43,8 @@ LOCAL_APPS = [
     'course',
     'applications',
     'chat',
+    'groups',
+    'students',
 ]
 
 EXTERNAL_APPS = [
