@@ -26,22 +26,16 @@ class Subject(BaseModel):
         verbose_name_plural = _("Fanlar")
         ordering = ["name"]
 
+
+
 class Center(BaseModel):
-    owner = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='owned_centers',
-        limit_choices_to={'is_center_admin': True}
-    )
+    owner = models.ForeignKey(User,on_delete=models.CASCADE,related_name='owned_centers',limit_choices_to={'is_center_admin': True})
     name = models.CharField(max_length=200)
     phone = models.CharField(max_length=50, null=True, blank=True)
     telegram = models.CharField(max_length=100, null=True, blank=True, help_text=_("Telegram username yoki link"))
     email = models.EmailField(max_length=255, null=True, blank=True)
     avatar = models.ImageField(upload_to='centers/avatars/', null=True, blank=True)
     bio = models.TextField(blank=True, null=True)
-    subjects = models.ManyToManyField(Subject, related_name='centers', blank=True)  
-
-
 
     def __str__(self):
         return self.name
@@ -52,9 +46,8 @@ class Center(BaseModel):
 
 
 class Teacher(BaseModel):
-    first_name = models.CharField(max_length=500, null= False, blank=False)
-    last_name = models.CharField(max_length=500, null=False, blank= False)
-    user = models.OneToOneField(User,on_delete=models.CASCADE,related_name='teacher_profile',limit_choices_to={'is_teacher': True})
+    full_name = models.CharField(max_length=500, null= False, blank=False)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='teacher_profile',limit_choices_to={'is_teacher': True})
     center = models.ForeignKey(Center,on_delete=models.CASCADE,related_name='teachers')
     subjects = models.ManyToManyField(Subject,related_name='teachers',blank=True)
     experience_years = models.PositiveIntegerField(default=0)
@@ -63,7 +56,8 @@ class Teacher(BaseModel):
     bio = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.profile.full_name} ({self.center.name})"
+        return f"{self.full_name} ({self.center.name})"
+
 
     class Meta:
         verbose_name = _("O‘qituvchi")

@@ -31,8 +31,8 @@ image_preview.short_description = "Rasm"
 class TeacherInline(admin.TabularInline):
     model = Teacher
     extra = 1
-    fields = ('get_full_name', 'get_subjects', 'experience_years')
-    readonly_fields = ('get_full_name', 'get_subjects')
+    fields = ('full_name', 'get_subjects', 'experience_years')
+    readonly_fields = ('full_name', 'get_subjects')
     show_change_link = True
 
     def get_full_name(self, obj):
@@ -67,34 +67,29 @@ class SubjectAdmin(admin.ModelAdmin):
 
 @admin.register(Center)
 class CenterAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'email', 'phone', 'telegram', 'get_subjects', avatar_preview)
+    list_display = ('name', 'owner', 'email', 'phone', 'telegram', avatar_preview)
     search_fields = ('name', 'owner__email', 'email', 'phone')
     list_filter = ('owner', 'created_at')
     readonly_fields = ('created_at', 'updated_at', avatar_preview)
     inlines = [TeacherInline, LocationInline]
-    filter_horizontal = ('subjects',)  
 
-
-    def get_subjects(self, obj):
-        return ", ".join([s.name for s in obj.subjects.all()])
-    get_subjects.short_description = "Fanlar"
 
     ordering = ('-created_at',)
     list_per_page = 20
 
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('get_full_name', "first_name", "last_name", 'get_center', 'get_subjects', 'experience_years', image_preview)
+    list_display = ( "full_name", 'get_center', 'get_subjects', 'experience_years', image_preview)
     list_filter = ('center',)
     search_fields = ('user__profile__full_name', 'center__name')
     readonly_fields = ('created_at', 'updated_at', image_preview)
 
     fieldsets = (
         ('Shaxsiy maʼlumotlar', {
-            'fields': ('user', "first_name", "last_name")
+            'fields': ('user', "full_name", 'subjects')
         }),
         ('Taʼlim va ish', {
-            'fields': ('subjects', 'experience_years', 'center')
+            'fields': ('experience_years', 'center')
         }),
         ('Rasm va tizim', {
             'fields': ('image', image_preview, 'created_at', 'updated_at')

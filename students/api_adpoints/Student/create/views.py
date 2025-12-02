@@ -35,7 +35,7 @@ class StudentCreateAPIView(APIView):
 
         if not (user.is_superadmin or user.is_center_admin):
             return Response(
-                {"detail": "❌ Sizda student yaratish uchun ruxsat yo'q."},
+                {"detail": "Sizda student yaratish uchun ruxsat yo'q."},
                 status=status.HTTP_403_FORBIDDEN
             )
 

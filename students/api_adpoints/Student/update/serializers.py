@@ -13,4 +13,7 @@ class StudentUpdateSerializers(serializers.ModelSerializer):
             'birth_date',
             'address',
         ]
-        read_only_fields = ["user"]
+
+        extra_kwargs = {
+            'user': {'required': False},
+        }
