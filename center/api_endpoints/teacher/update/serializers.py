@@ -7,8 +7,7 @@ class TeacherUpdateSerializers(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = [
-            "first_name",
-            "last_name",
+            'full_name',
             "user",
             "center",
             "subjects",

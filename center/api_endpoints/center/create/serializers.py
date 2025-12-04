@@ -10,6 +10,6 @@ class CenterCreateSerializer(serializers.ModelSerializer):
                   'telegram', 
                   'email', 
                   'avatar', 
-                  'bio', ''
-                  'subjects']
+                  'bio'
+            ]
         read_only_fields = ['owner']

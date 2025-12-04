@@ -8,8 +8,7 @@ class TeacherListSerializers(serializers.ModelSerializer):
         model = Teacher
         fields = [
             'id',
-            "first_name",
-            "last_name",
+            'full_name',
             "user",
             "center",
             "subjects",

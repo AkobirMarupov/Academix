@@ -48,6 +48,6 @@ def story_post_save(sender, instance, created, **kwargs):
             crontab=start_crontab,
             name=f"task_expire_story_{instance.id}",
             task="accaunts.tasks.create_story_expirer_task",
-            args=json.dumps(args),  # args ni json ko‘rinishda yozish kerak
+            args=json.dumps(args), 
             one_off=True
         )
