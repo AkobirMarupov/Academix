@@ -17,7 +17,7 @@ class ProfileListAPIView(APIView):
 
     def get(self, request):
         profile = Profile.objects.all()
-        serializer = ProfileListSerializer(print, many=True)
+        serializer = ProfileListSerializer(profile, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 

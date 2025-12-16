@@ -44,12 +44,14 @@ urlpatterns = [
     path('👨🏼‍🏫Teacher/', include("center.api_endpoints.teacher.urls")),
     path('📍Location/', include("center.api_endpoints.location.urls")),
     path('📚Course/', include('course.api_endpoints.course.urls')),
+    path('🛂Story/', include('account.api_endpoints.Story.urls')),
     path('🥇Review/', include('course.api_endpoints.review.urls')),
     path('🎒homework/', include('course.api_endpoints.homework.urls')),
     path('👨‍🎓Student/', include('students.api_adpoints.Student.urls')),
     path('👥Groups/', include('groups.api_endpoints.group.urls')),
     path('👫GroupStudent/', include('groups.api_endpoints.groupstudent.urls')),
-    path('📜Applications/', include('applications.api_endpoints.Application.urls'))
+    path('📜Applications/', include('applications.api_endpoints.Application.urls')),
+    
 ]
 
 if settings.DEBUG:
