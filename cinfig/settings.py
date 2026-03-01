@@ -78,6 +78,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'cinfig.urls'
 
 TEMPLATES = [
@@ -164,7 +165,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Frontend ilova URL manzili (emaildagi tasdiqlash havolasi uchun)
-FRONTEND_URL = "https://academix_uz_in.com"
+FRONTEND_URL = "https://SkillSwap_uz_in.com"
 
 
 
@@ -211,13 +212,13 @@ SIMPLE_JWT = {
 # JAZZMIN settings
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Academix Admin",
-    "site_header": "Academix",
+    "site_title": "SkillSwap Admin",
+    "site_header": "SkillSwap",
     "site_logo": "apple.jpg",
     "login_logo": "apple.jpg",
     "site_logo_classes": "img-circle",
     "site_icon": "apple.jpg",
-    "welcome_sign": "Welcome to the Academix Admin",
+    "welcome_sign": "Welcome to the SkillSwap Admin",
     "copyright": "ETA 2025",
     "search_model": ["auth.User", "auth.Group"],
     "user_avatar": "avatar",
