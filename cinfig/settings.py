@@ -55,7 +55,7 @@ EXTERNAL_APPS = [
     'jazzmin',
     'django_celery_beat',
     'django_celery_results',
-    ]
+]
 
 INSTALLED_APPS = LOCAL_APPS + EXTERNAL_APPS + DJANGO_APPS
 
@@ -209,7 +209,7 @@ SIMPLE_JWT = {
 
 
 
-# JAZZMIN settings
+# JAZZMIN
 
 JAZZMIN_SETTINGS = {
     "site_title": "SkillSwap Admin",
@@ -223,9 +223,6 @@ JAZZMIN_SETTINGS = {
     "search_model": ["auth.User", "auth.Group"],
     "user_avatar": "avatar",
 
-    ############
-    # Top Menu #
-    ############
 
     "topmenu_links": [
         {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
@@ -233,9 +230,6 @@ JAZZMIN_SETTINGS = {
         {"app": "accounts"},
     ],
 
-    #############
-    # Side Menu #
-    #############
 
     "show_sidebar": True,
     "navigation_expanded": False,
@@ -257,14 +251,9 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
 
-    #################
-    # Related Modal #
-    #################
+
     "related_modal_active": False,
 
-    #############
-    # UI Tweaks #
-    #############
     "custom_css": None,
     "custom_js": None,
     "use_google_fonts_cdn": True,

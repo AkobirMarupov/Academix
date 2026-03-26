@@ -26,3 +26,5 @@ class CenterRetrieveAPIView(APIView):
     
         serializer = CenterLisSerializers(center)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    

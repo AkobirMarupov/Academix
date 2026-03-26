@@ -114,3 +114,5 @@ class RegisterConfirmAPIView(APIView):
             {"detail": "Foydalanuvchi muvaffaqiyatli tasdiqlandi."},
             status=status.HTTP_200_OK,
         )
+
+

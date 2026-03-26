@@ -10,6 +10,4 @@ urlpatterns = [
     path('list/', CenterLIstAPIView.as_view(), name="center-list"),
     path('create/', CenterCreateAPIView.as_view(), name='center-create'),
     path('delete/<int:pk>/', CenterDEleteAPIView.as_view(), name='center-delete')
-
-    
 ]

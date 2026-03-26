@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="097a3c4e-ccc3-4714-8c21-9ff19772fa45" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cinfig/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/cinfig/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cinfig/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/cinfig/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
